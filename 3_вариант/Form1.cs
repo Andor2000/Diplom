@@ -76,8 +76,9 @@ namespace _3_вариант
                 TextBox tb = (TextBox)sender;
                 int y = Cursor.Position.Y - y_mouse;
                 tb.Location = new Point(x_tb, y_tb + y);
-
-                foreach (TextBox textb in list_textbox)  // переставляет в левой колонке
+                
+                // переставляет в левой колонке
+                foreach (TextBox textb in list_textbox)  
                 {
                     if (textb != tb && list_textbox.Contains(tb) 
                         && tb.Location.Y >= textb.Location.Y - 7 && tb.Location.Y <= textb.Location.Y + 7)
@@ -87,8 +88,8 @@ namespace _3_вариант
                         textb.Location = new Point(textb.Location.X, help);
                     }
                 }
-
-                foreach (TextBox textb in list_textbox2) // переставляет в правой колонке
+                // переставляет в правой колонке
+                foreach (TextBox textb in list_textbox2) 
                 {
                     if (textb != tb && list_textbox2.Contains(tb)
                         && tb.Location.Y >= textb.Location.Y - 7 && tb.Location.Y <= textb.Location.Y + 7)
@@ -98,9 +99,8 @@ namespace _3_вариант
                         textb.Location = new Point(textb.Location.X, help);
                     }
                 }
-
-                if (Cursor.Position.X - x_mouse > tb.Size.Width / 2 && list_textbox.Contains(tb)) // из левой в правую
-                {
+                // из левой в правую                
+                if (Cursor.Position.X - x_mouse > tb.Size.Width / 2 && list_textbox.Contains(tb)) {
                     list_textbox.Remove(tb); // удалил из первого
                     list_textbox2.Add(tb); // добавил во второй
                     tb.BackColor = panel3.BackColor;
@@ -115,7 +115,8 @@ namespace _3_вариант
                     
                     y_tb_konech = (list_textbox2.Count - 1) * tb.Size.Height;
                 }
-                if ((Cursor.Position.X - x_mouse)*(-1) > tb.Size.Width / 2 && list_textbox2.Contains(tb)) // из правой в левую
+                // из правой в левую
+                if ((Cursor.Position.X - x_mouse)*(-1) > tb.Size.Width / 2 && list_textbox2.Contains(tb)) 
                 {
                     list_textbox2.Remove(tb); // удалил из первого
                     list_textbox.Add(tb); // добавил во второй
@@ -131,8 +132,6 @@ namespace _3_вариант
                     }                    
                     y_tb_konech = (list_textbox.Count - 1) * tb.Size.Height;
                 }
-
-
             }
         }
 
