@@ -56,6 +56,7 @@ namespace _3_вариант
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.listView1 = new System.Windows.Forms.ListView();
+            this.label2 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.addElement.SuspendLayout();
             this.SuspendLayout();
@@ -106,12 +107,13 @@ namespace _3_вариант
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(98, 16);
+            this.button2.Location = new System.Drawing.Point(6, 50);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(31, 29);
             this.button2.TabIndex = 3;
             this.button2.Text = "<";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // button1
             // 
@@ -213,7 +215,7 @@ namespace _3_вариант
             // 
             this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.panel2.BackColor = System.Drawing.Color.RosyBrown;
+            this.panel2.BackColor = System.Drawing.Color.DeepSkyBlue;
             this.panel2.Location = new System.Drawing.Point(3, 85);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(170, 451);
@@ -225,7 +227,7 @@ namespace _3_вариант
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(125, 27);
             this.textBox1.TabIndex = 1;
-            this.textBox1.Text = "Привет ";
+            this.textBox1.Text = "Привет мир";
             // 
             // listBox1
             // 
@@ -260,12 +262,22 @@ namespace _3_вариант
             this.listView1.TabIndex = 2;
             this.listView1.UseCompatibleStateImageBehavior = false;
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(769, 31);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(146, 20);
+            this.label2.TabIndex = 7;
+            this.label2.Text = "Содержимое папки";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.ClientSize = new System.Drawing.Size(1011, 573);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.listBox1);
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.textBox1);
@@ -304,6 +316,7 @@ namespace _3_вариант
         private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.ListView listView1;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
     }
 }
 
