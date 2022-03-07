@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace _3_вариант
+namespace _4_этап
 {
     static class Program
     {
@@ -17,7 +17,7 @@ namespace _3_вариант
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form3());
+            Application.Run(new Form1());
         }
     }
 }

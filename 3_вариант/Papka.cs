@@ -26,7 +26,7 @@ namespace _3_вариант
         {
             id = id_papki;
 
-            this.textBox.Width = panel2.Width - 1;
+            this.textBox.Width = panel2.Width - 1; // ширина
             textBox.BackColor = panel2.BackColor;
 
             int i = (list_textbox.Count) * textBox.Size.Height;

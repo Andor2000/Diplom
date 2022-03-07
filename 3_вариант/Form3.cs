@@ -9,51 +9,36 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Configuration; 
 using System.Data.SqlClient;
-
 namespace _3_вариант
 {
-    public partial class Form1 : Form
+    public partial class Form3 : Form
     {
         List<Papka> list_textbox = new();
         List<Papka> list_textbox_left = new();
         List<Papka> list_textbox_right = new();
 
         int id_papki = 1;
-        //int id_aktivnoy_papki=0;
 
         Papka aktivnaya_papka = new();
         bool peretaskivanie = false;
 
         int x_mouse, y_mouse;
         int y_tb;
-        public Form1()
+        public Form3()
         {
             InitializeComponent();
-            // textBox1.Visible = false;
-            listBox1.Visible = false;
-            listView1.Visible = false;
-            //button2.Visible = false;
             button2.Enabled = false;
             button3.Visible = false;
-            button4.Visible = false;
         }
-
-        private void button1_Click(object sender, EventArgs e) // добавление в левую колонку папок
+        private void button1_Click(object sender, EventArgs e) 
         {
-            Papka papka = new Papka();
+            Papka papka = new();
             id_papki = papka.sozdanie_papki(panel2, list_textbox_left, id_papki);
 
             papka.kolonka = 1;
 
-            int kolvo_lev_kolon = 0;
-            foreach (Papka pap in list_textbox_left)
-            {
-                if (pap.kolonka == 1)
-                {
-                    kolvo_lev_kolon++;
-                }
-            }
-            papka.mesto_v_spiske = kolvo_lev_kolon + 1;
+            
+            papka.mesto_v_spiske = list_textbox_left.Count + 1;
 
             if (list_textbox_left.Count == 0) // значит создается вообще первая папка
             {
@@ -81,12 +66,14 @@ namespace _3_вариант
             list_textbox.Add(papka);            // добавление в общий список папок
             list_textbox_left.Add(papka);       // спиок папок в левой колонке
 
-            papka.textBox.MouseDown += kliknyl_po_textBox;
-            papka.textBox.MouseUp += otpustil_textBox;
-            papka.textBox.MouseMove += derjish_textBox;
-            papka.textBox.MouseDoubleClick += perehod_v_papky;
+            papka.textBox.MouseDown += Peretaskivanie_kliknyl_po_textBox;
+            papka.textBox.MouseUp += Peretaskivanie_otpustil_textBox;
+            papka.textBox.MouseMove += Peretaskivanie_derjish_textBox;
+            papka.textBox.MouseDoubleClick += Perehod_v_papky;
+            papka.textBox.ContextMenuStrip = contextMenuTextBox; // добавил контекстное меню
+
         }
-        private void perestavlenie_v_kolonke(Papka papka)
+        private void Peretaskivanie_perestavlenie_v_kolonke(Papka papka)
         {
             List<Papka> list = papka.kolonka == 1 ? list_textbox_left : list_textbox_right;
 
@@ -104,7 +91,7 @@ namespace _3_вариант
                 }
             }
         }
-        private void peretaskivanie_mejdy_kolonkami(Papka papka)
+        private void Peretaskivanie_mejdy_kolonkami(Papka papka)
         {
             List<Papka> list;
             List<Papka> new_list;
@@ -168,17 +155,9 @@ namespace _3_вариант
                     aktivnaya_papka.papki_potomki.Remove(papka);// удаляем из потомка
                     papka.papka_roditel = aktivnaya_papka.papka_roditel;
                 }
-                string str = "";
-
-                foreach (Papka papa in aktivnaya_papka.papki_potomki)
-                {
-                    str += papa.textBox.Text + "\n";
-                }
-
-                label2.Text = str;
             }
         }
-        private void kliknyl_po_textBox(object sender, MouseEventArgs e) // кликнул и не отпустил 
+        private void Peretaskivanie_kliknyl_po_textBox(object sender, MouseEventArgs e) // кликнул и не отпустил 
         {
             peretaskivanie = true;
             x_mouse = Cursor.Position.X;
@@ -186,11 +165,11 @@ namespace _3_вариант
             TextBox textb = (TextBox)sender;
             y_tb = textb.Location.Y;
         }
-        private void derjish_textBox(object sender, MouseEventArgs e) // пока мышь находится на элементе
+        private void Peretaskivanie_derjish_textBox(object sender, MouseEventArgs e) // пока мышь находится на элементе
         {
             if (peretaskivanie)
             {
-                Papka papka = new Papka();
+                Papka papka = new();
 
                 foreach (Papka pap in list_textbox)
                 {
@@ -203,12 +182,12 @@ namespace _3_вариант
                 int y = Cursor.Position.Y - y_mouse;
                 papka.textBox.Location = new Point(papka.textBox.Location.X, y_tb + y);
 
-                perestavlenie_v_kolonke(papka);
-                peretaskivanie_mejdy_kolonkami(papka);
+                Peretaskivanie_perestavlenie_v_kolonke(papka);
+                Peretaskivanie_mejdy_kolonkami(papka);
 
             }
         }
-        private void otpustil_textBox(object sender, MouseEventArgs e) // при отпускании левой кнопки мыши 
+        private void Peretaskivanie_otpustil_textBox(object sender, MouseEventArgs e) // при отпускании левой кнопки мыши 
         {
             peretaskivanie = false;
             foreach (Papka pap in list_textbox)
@@ -221,7 +200,6 @@ namespace _3_вариант
                 }
             }
         }
-
         private void button2_Click(object sender, EventArgs e) // вернуться назад в предыдущую папку
         {
             // list_textbox_left[0].papka_roditel;
@@ -254,11 +232,11 @@ namespace _3_вариант
                 if(aktivnaya_papka.papka_roditel == pap.id)
                 {
                     rod = pap.papka_roditel;
+
                 }
             }
             // делаем левую колонку через родителя-родителя
 
-            //MessageBox.Show(Convert.ToString(rod));
             int kolvo_pred_papok = 0;
             foreach(Papka pap in list_textbox)
             {
@@ -266,7 +244,6 @@ namespace _3_вариант
                 {
                     kolvo_pred_papok++;
                 }
-
             }
             //MessageBox.Show(Convert.ToString(kolvo_pred_papok));
             i = 1;
@@ -301,9 +278,81 @@ namespace _3_вариант
             
 
         }
+        private void Delete_rekursiya(Papka pap)
+        {
+            if (pap.papki_potomki.Count > 0) // есть подпапки
+            {
+                foreach (Papka papka_doch in pap.papki_potomki)
+                {
+                    Delete_rekursiya(papka_doch);
+                }                
+            }
+            foreach (Papka papka in list_textbox) //
+            {
+                if (papka == pap)
+                {
+                    pap = null;
+                    list_textbox.Remove(papka);
+                    break;
+                }
+            }            
+        }
+        private void удалитьToolStripMenuItem_Click(object sender, EventArgs e) // удаление TextBox
+        {
+            // ПЕРЕПИСАТЬ ФУНКЦИЮ
+            // ПЕРЕПИСАТЬ ФУНКЦИЮ
+            // ПЕРЕПИСАТЬ ФУНКЦИЮ
 
+            //Papka pap1 = new();
+            foreach (Papka pap in list_textbox)
+            {
+                if (pap.textBox == contextMenuTextBox.SourceControl)
+                {
 
-        private void perehod_v_papky(object sender, MouseEventArgs e) // два раза клинкул по папке
+                    if (pap == aktivnaya_papka)
+                    {
+                        MessageBox.Show("Нельзя удалить открыую папку");
+                    }
+                    else
+                    {
+                        List<Papka> list = pap.kolonka == 1 ? list_textbox_left : list_textbox_right;
+                        foreach (Papka pap1 in list) // поправление всех папок в прошлой колонке которые ниже
+                        {                            
+                            if (pap1.mesto_v_spiske > pap.mesto_v_spiske)
+                            {
+                                pap1.textBox.Location = new Point(pap1.textBox.Location.X, pap1.textBox.Location.Y - pap1.textBox.Size.Height);
+                                pap1.mesto_v_spiske--;
+                            }
+                        }
+                        list.Remove(pap);
+                        Panel pn = pap.kolonka == 1 ? panel2 : panel3;
+                        pn.Controls.Remove(pap.textBox);
+                        //pap1 = pap;
+                        Delete_rekursiya(pap);
+                    }
+                    break;
+                }
+            }           
+            
+
+            //string str = "";
+            //foreach (Papka papa in list_textbox)
+            //{
+            //    str += papa.textBox.Text + "\n";
+            //}
+
+            //label2.Text = str;
+        }
+        private void button4_Click(object sender, EventArgs e)
+        {
+            //List<Papka> papka_list = new();
+            //Papka papka = new Papka();
+            //papka_list.Add(papka);
+            //papka = null;
+            //MessageBox.Show(Convert.ToString(papka_list.Count));
+            
+        }
+        private void Perehod_v_papky(object sender, MouseEventArgs e) // два раза клинкул по папке
         {
             aktivnaya_papka.textBox.BackColor = panel2.BackColor;  // меняем цвет на фон у предыдущей активной папки 
 
@@ -313,11 +362,10 @@ namespace _3_вариант
                 {
                     aktivnaya_papka = pap;
                     aktivnaya_papka.textBox.BackColor = Color.GreenYellow;
-                    label1.Text = ((TextBox)sender).Text;
+                    label1.Text = aktivnaya_papka.textBox.Text;
                     break;
                 }
             }
-
 
             if (aktivnaya_papka.kolonka == 1)
             {
@@ -344,10 +392,8 @@ namespace _3_вариант
             {
                 button2.Enabled=true; // включил кнопку возврата назад
 
-                panel2.Controls.Clear(); // очищаем левую колонку
-                panel3.Controls.Clear(); // очищаем правую колонку
+                panel2.Controls.Clear(); // очищаем левую колонку                
                 list_textbox_left.Clear();
-
                 int i = 1;
                 while (i <= list_textbox_right.Count)
                 {
@@ -363,9 +409,11 @@ namespace _3_вариант
                     }
                     i++;
                 }
+
+                panel3.Controls.Clear(); // очищаем правую колонку
                 list_textbox_right.Clear();
 
-               i = 1;
+                i = 1;
                 while (i <= aktivnaya_papka.papki_potomki.Count) // количество дочерних папок
                 {
                     foreach (Papka pap in aktivnaya_papka.papki_potomki) // смотрим каждую подпапку 
@@ -384,13 +432,13 @@ namespace _3_вариант
 
 
 
-            string str = "";
-            foreach (Papka papa in aktivnaya_papka.papki_potomki)
-            {
-                str += papa.textBox.Text + "\n";
-            }
+            //string str = "";
+            //foreach (Papka papa in aktivnaya_papka.papki_potomki)
+            //{
+            //    str += papa.textBox.Text + "\n";
+            //}
 
-            label2.Text = str;
+            //label2.Text = str;
         }
     }
 }

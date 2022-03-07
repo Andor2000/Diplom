@@ -69,11 +69,12 @@ namespace Батон
 
         private void button4_Click(object sender, EventArgs e) // сохранить
         {
-            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            //if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                string fname = saveFileDialog1.FileName;
+                //  MessageBox.Show(saveFileDialog1.FileName);
+                //string fname = saveFileDialog1.FileName;
+                string fname = "save.rtf";
                 richTextBox1.SaveFile(fname);
-                //File.WriteAllText(fname, richTextBox1.Text);
             }
             
 
@@ -81,9 +82,10 @@ namespace Батон
 
         private void button5_Click(object sender, EventArgs e) // открыть
         {
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            //if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                string fname = openFileDialog1.FileName;
+                //  string fname = openFileDialog1.FileName;
+                string fname = "save.rtf"; 
                 richTextBox1.LoadFile(fname);
                 //richTextBox1.Text = File.ReadAllText(fname);
             }
