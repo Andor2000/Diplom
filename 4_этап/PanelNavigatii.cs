@@ -13,24 +13,23 @@ namespace _4_этап
 {
     class PanelNavigatii
     {
-        private static int papka_praroditel_objey_programmi_id;
-        static int id_list = 1;
+        private static int papka_praroditel_objey_programmi_id = 0;
 
-
+        MouseButtons mouseButtons = new();
         private static Form form;
         private static PictureBox pictureBoxBack = new();
-        private static bool mojno_vernutsa_nazad = false;
         private static Panel panel_left = new();
         private static Panel panel_right = new();
         private static RichTextBox list_vivoda = new();
+        private static bool mojno_vernutsa_nazad = false;
         private static Label label;
 
-       // private static int id_papki = 1;
+        private static PanelNavigatii navel_na_object = new();
         private static PanelNavigatii aktivnaya_papka = new();
         private static PanelNavigatii aktivniy_list = new();
         private static bool est_aktivnaya_papka = false;
         private static bool est_asktivniy_list = false;
-        private static PanelNavigatii navel_na_object = new();
+        private bool najata_left_button = false;
 
         private FlowLayoutPanel flpanel = new();
         private PictureBox picBox = new();
@@ -41,10 +40,11 @@ namespace _4_этап
         private int papka_roditel;
         private bool this_papka;
         private List<PanelNavigatii> papki_potomki = new();
+        private ContextMenuStrip contextMS = new();
 
         private static List<PanelNavigatii> list_object = new();
         private static List<PanelNavigatii> list_object_left = new();
-        private static List<PanelNavigatii> list_papki_right = new();
+        private static List<PanelNavigatii> list_object_right = new();
 
         private Timer timer = new();
         private int timer_value = 1;
@@ -56,17 +56,16 @@ namespace _4_этап
         private bool vozmojno_peretaskivanie = false;
         private bool idet_peretaskivanie = false;
         private bool bilo_rename = false;
-        
-        private Color color_text_obichniy = Color.White; 
+
+        private Color color_text_obichniy = Color.White;
         private Color color_text_rename = Color.Black;
         private Color color_fona_object = Color.FromArgb(51, 51, 76);
         private Color color_fona_navel_na_object = ColorTranslator.FromHtml("#3d3d5a");
         private Color color_fona_aktivniy_obj = ColorTranslator.FromHtml("#6B90B8");
         private Color color_fona_peretaskivaniya = ColorTranslator.FromHtml("#738497");
-        private Color color_fona_rename = Color.White; 
-    
+        private Color color_fona_rename = Color.White;
 
-        public void object_kotorie_prigodatsa(Form form1, Panel panel_left1, Panel panel_right1,RichTextBox list_vivoda1,PictureBox picBox_nazad, Label label1)
+        public void object_kotorie_prigodatsa(Form form1, Panel panel_left1, Panel panel_right1, RichTextBox list_vivoda1, PictureBox picBox_nazad, Label label1)
         {
             form = form1;
             panel_left = panel_left1;
@@ -74,10 +73,9 @@ namespace _4_этап
             list_vivoda = list_vivoda1;
             pictureBoxBack = picBox_nazad;
             label = label1;
-        }        
-        public void sozdanie_papki_DB(PanelNavigatii papka, int id_db, string name_db, int mesto_db,int id_roditel) 
+        }
+        public void sozdanie_papki_DB(PanelNavigatii papka, int id_db, string name_db, int mesto_db, int id_roditel)
         {
-            papka_praroditel_objey_programmi_id = 0;
             id = id_db;
             textBox.Text = name_db;
             kolonka = 1;
@@ -97,32 +95,11 @@ namespace _4_этап
                 }
             }
 
-            sozd_FLPanel(mesto_v_spiske);
-            sozd_PictureBox_papki();
-            sozd_TextBox();
-
-            textBox.MouseUp += perehod_v_object_MouseUp;             // клинкул по папке (отпустил мышь)
-            textBox.MouseMove += navedenie_na_object_MouseMove;      // курсор на элементе / ПЕРЕТАСКИВАНИЕ
-            textBox.MouseLeave += ubral_cursor_s_object_MouseLeave;  // покинул папку (не кликая) 
-            textBox.MouseDown += najal_ne_otpustil_MouseDown;       // кликнул по папке (не отпустил мышь)  перетаскивание
-            textBox.Leave += pokinul_obj_Leave;                   // переименовал и покинул текстбокс
-            textBox.KeyDown += najali_enter_KeyDown;                // при вводе TextBox нажали Enter (pokinul_obj_Leave)
-
-            list_object.Add(papka);            // добавление в общий список папок
-            if (id_roditel == 0)
-            {
-                list_object_left.Add(papka);       // спиок папок в левой колонке
-                panel_left.Controls.Add(flpanel); // добавляем на панель
-                kolonka = 1;
-            }
-
-            timer.Interval = 1;
-            timer.Enabled = false;
-            timer.Tick += timer_tick;
+            objie_metodi_pri_sozdanii_obj(papka);
         }
-        public void sozdanie_lista_DB(PanelNavigatii list, int id_db,string  name_db, int mesto_db, int id_roditel) 
+        public void sozdanie_lista_DB(PanelNavigatii list, int id_db, string name_db, int mesto_db, int id_roditel)
         {
-            id = id_db; 
+            id = id_db;
             mesto_v_spiske = mesto_db;
             papka_roditel = id_roditel;
             this_papka = false;
@@ -140,32 +117,11 @@ namespace _4_этап
                 }
             }
 
-            sozd_FLPanel(mesto_v_spiske);
-            sozd_PictureBox_lista();
-            sozd_TextBox();
-
-            textBox.MouseDown += najal_ne_otpustil_MouseDown;       // кликнул по листу  (не отпустил мышь)  перетаскивание
-            textBox.MouseMove += navedenie_na_object_MouseMove;      // курсор на элементе / ПЕРЕТАСКИВАНИЕ
-            textBox.MouseUp += perehod_v_object_MouseUp;             // клинкул по листу (отпустил мышь)   
-            textBox.Leave += pokinul_obj_Leave;                   // переименовал и покинул текстбокс
-            textBox.KeyDown += najali_enter_KeyDown;                // при вводе TextBox нажали Enter (pokinul_obj_Leave)
-            textBox.MouseLeave += ubral_cursor_s_object_MouseLeave;  // покинул папку (не кликая)
-
-            list_object.Add(list);            // добавление в общий список папок
-            if (id_roditel == 0)
-            {
-                list_object_left.Add(list);       // спиок папок в левой колонке
-                panel_left.Controls.Add(flpanel); // добавляем на панель
-                kolonka = 1;
-            }
-
-            timer.Interval = 1;
-            timer.Enabled = false;
-            timer.Tick += timer_tick;
+            objie_metodi_pri_sozdanii_obj(list);
         }
-        public void sozdanie_papki(PanelNavigatii papka)        
+        public void sozdanie_papki(PanelNavigatii papka)
         {
-           
+
             kolonka = 1;
             mesto_v_spiske = list_object_left.Count + 1;
             papka_roditel = papka_praroditel_objey_programmi_id;
@@ -173,7 +129,7 @@ namespace _4_этап
             this_papka = true;
 
             LocalDB db = new();
-            id = LocalDB.id_new_papki(db,  textBox.Text, mesto_v_spiske);
+            id = LocalDB.id_new_papki(db, textBox.Text, mesto_v_spiske);
             db.new_content(db, id, papka_roditel);
 
             if (papka_roditel != 0)
@@ -187,41 +143,20 @@ namespace _4_этап
                     }
                 }
             }
-
-            sozd_FLPanel(mesto_v_spiske);
-            sozd_PictureBox_papki();
-            sozd_TextBox();
-
-            textBox.MouseUp += perehod_v_object_MouseUp;             // клинкул по папке (отпустил мышь)
-            textBox.MouseMove += navedenie_na_object_MouseMove;      // курсор на элементе / ПЕРЕТАСКИВАНИЕ
-            textBox.MouseLeave += ubral_cursor_s_object_MouseLeave;  // покинул папку (не кликая) 
-            textBox.MouseDown += najal_ne_otpustil_MouseDown;       // кликнул по папке (не отпустил мышь)  перетаскивание
-            textBox.Leave += pokinul_obj_Leave;                   // переименовал и покинул текстбокс
-            textBox.KeyDown += najali_enter_KeyDown;                // при вводе TextBox нажали Enter (pokinul_obj_Leave)
-
-            list_object.Add(papka);            // добавление в общий список папок
-            list_object_left.Add(papka);       // спиок папок в левой колонке
-            panel_left.Controls.Add(flpanel); // добавляем на панель
-
-            timer.Interval = 1;
-            timer.Enabled = false;
-            timer.Tick += timer_tick;
+            objie_metodi_pri_sozdanii_obj(papka);
         }
-        public void sozdanie_lista(PanelNavigatii list)         
+        public void sozdanie_lista(PanelNavigatii list)
         {
-            id = id_list;
-            id_list++;
-
             kolonka = 1;
             mesto_v_spiske = list_object_left.Count + 1;
             papka_roditel = papka_praroditel_objey_programmi_id;
             this_papka = false;
+            textBox.Text = "Лист";
 
             LocalDB db = new();
-            id = LocalDB.id_new_lista(db, "Лист", mesto_v_spiske, papka_roditel);
+            id = LocalDB.id_new_lista(db, textBox.Text, mesto_v_spiske, papka_roditel);
             //db.new_content(db, id, papka_roditel);
 
-            textBox.Text = "Лист" + id;
             if (papka_roditel != 0)
             {
                 foreach (PanelNavigatii pap in list_object)
@@ -233,52 +168,75 @@ namespace _4_этап
                     }
                 }
             }
-
+            objie_metodi_pri_sozdanii_obj(list);
+        }
+        private void objie_metodi_pri_sozdanii_obj(PanelNavigatii obj)
+        {
+            contextMenuSozdanie(contextMS);
             sozd_FLPanel(mesto_v_spiske);
-            sozd_PictureBox_lista();
+            sozd_PictureBox();                
             sozd_TextBox();
 
-            textBox.MouseDown += najal_ne_otpustil_MouseDown;       // кликнул по листу  (не отпустил мышь)  перетаскивание
-            textBox.MouseMove += navedenie_na_object_MouseMove;      // курсор на элементе / ПЕРЕТАСКИВАНИЕ
-            textBox.MouseUp += perehod_v_object_MouseUp;             // клинкул по листу (отпустил мышь)   
-            //textBox.Leave += list_pokinul_papky_Leave;                   // переименовал и покинул текстбокс
-            //textBox.KeyDown += list_najali_enter_KeyDown;                // при вводе TextBox нажали Enter (pokinul_obj_Leave)
+            //flpanel.ContextMenuStrip = contextMS;
+            //flpanel.MouseUp += perehod_v_object_MouseUp;            // клинкул по папке (отпустил мышь)
+            //flpanel.MouseMove += navedenie_na_object_MouseMove;     // курсор на элементе / ПЕРЕТАСКИВАНИЕ
+            //flpanel.MouseLeave += ubral_cursor_s_object_MouseLeave; // покинул папку (не кликая) 
+            //flpanel.MouseDown += najal_ne_otpustil_MouseDown;       // кликнул по папке (не отпустил мышь)  перетаскивание
+            //flpanel.Leave += pokinul_obj_Leave;                     // переименовал и покинул текстбокс
+            //flpanel.KeyDown += najali_enter_KeyDown;                // при вводе TextBox нажали Enter (pokinul_obj_Leave)
 
-            
-            textBox.MouseLeave += ubral_cursor_s_object_MouseLeave;  // покинул папку (не кликая)
+            textBox.ContextMenuStrip = contextMS;
+            textBox.MouseUp += perehod_v_object_MouseUp;            // клинкул по папке (отпустил мышь)
+            textBox.MouseMove += navedenie_na_object_MouseMove;     // курсор на элементе / ПЕРЕТАСКИВАНИЕ
+            textBox.MouseLeave += ubral_cursor_s_object_MouseLeave; // покинул папку (не кликая) 
+            textBox.MouseDown += najal_ne_otpustil_MouseDown;       // кликнул по папке (не отпустил мышь)  перетаскивание
+            textBox.Leave += pokinul_obj_Leave;                     // переименовал и покинул текстбокс
+            textBox.KeyDown += najali_enter_KeyDown;                // при вводе TextBox нажали Enter (pokinul_obj_Leave)
 
-            list_object.Add(list);            // добавление в общий список папок
-            list_object_left.Add(list);       // спиок папок в левой колонке
-            panel_left.Controls.Add(flpanel); // добавляем на панель
+            //picBox.ContextMenuStrip = contextMS;
+            //picBox.MouseUp += perehod_v_object_MouseUp;            // клинкул по папке (отпустил мышь)
+            //picBox.MouseMove += navedenie_na_object_MouseMove;     // курсор на элементе / ПЕРЕТАСКИВАНИЕ
+            //picBox.MouseLeave += ubral_cursor_s_object_MouseLeave; // покинул папку (не кликая) 
+            //picBox.MouseDown += najal_ne_otpustil_MouseDown;       // кликнул по папке (не отпустил мышь)  перетаскивание
+            //picBox.Leave += pokinul_obj_Leave;                     // переименовал и покинул текстбокс
+            //picBox.KeyDown += najali_enter_KeyDown;                // при вводе TextBox нажали Enter (pokinul_obj_Leave)
+
+
+            list_object.Add(obj);            // добавление в общий список папок
+            if (obj.papka_roditel == papka_praroditel_objey_programmi_id)
+            {
+                list_object_left.Add(obj);       // спиок папок в левой колонке
+                panel_left.Controls.Add(flpanel); // добавляем на панель
+                kolonka = 1;
+            }
 
             timer.Interval = 1;
             timer.Enabled = false;
             timer.Tick += timer_tick;
         }
-        public void vernutsa_nazad()                            
+        public void vernutsa_nazad()
         {
-            if (mojno_vernutsa_nazad) 
+            if (mojno_vernutsa_nazad)
             {
                 aktivnaya_papka.flpanel.BackColor = color_fona_object;
                 aktivnaya_papka.textBox.BackColor = color_fona_object;
 
                 panel_left.Controls.Clear(); // очищаем экран
                 panel_right.Controls.Clear();// очищаем экран
-                list_papki_right.Clear();
+                list_object_right.Clear();
 
                 foreach (PanelNavigatii pap in list_object_left) // переносим левую колонку вправо
                 {
                     pap.kolonka = 2;
                     panel_right.Controls.Add(pap.flpanel); // добавляем в правую колонку 
-                    list_papki_right.Add(pap);    // добавляем в лист, ответчстввенный за правую колонку
+                    list_object_right.Add(pap);    // добавляем в лист, ответчстввенный за правую колонку
                 }
                 list_object_left.Clear();
 
                 // находим родителя-родителя
-                papka_praroditel_objey_programmi_id = 0;
                 foreach (PanelNavigatii pap in list_object)
                 {
-                    if (aktivnaya_papka.papka_roditel == pap.id)
+                    if (aktivnaya_papka.papka_roditel == pap.id && pap.this_papka)
                     {
                         papka_praroditel_objey_programmi_id = pap.papka_roditel;
                     }
@@ -323,7 +281,7 @@ namespace _4_этап
 
             }
         }
-        public void close_book()                                
+        public void close_book()
         {
             if (est_asktivniy_list)
             {
@@ -334,41 +292,33 @@ namespace _4_этап
                 File.Delete("save.rtf");
             }
         }
-        private void sozd_FLPanel(int mesto)                    
+        private void sozd_FLPanel(int mesto)
         {
             flpanel.BackColor = color_fona_object;// цвет фона 
-            flpanel.Size = new Size(panel_left.Width, 26); // размер
+            flpanel.Size = new Size(panel_left.Width, 35); // размер
             flpanel.Padding = new Padding(5, 0, 0, 0);
             flpanel.Location = new Point(0, (mesto - 1) * flpanel.Size.Height);
         }
-        private void sozd_PictureBox_papki()                    
+        private void sozd_PictureBox()
         {
             picBox.SizeMode = PictureBoxSizeMode.Zoom;  // картинка во весь pictureBox
-            picBox.Size = new Size(22, 22);
-            picBox.Image = Image.FromFile(@"image\blue_papka.png");
+            picBox.Size = new Size(31, 31);
+            if (this_papka)
+                picBox.Image = Image.FromFile(@"image\blue_papka.png");
+            else
+                picBox.Image = Image.FromFile(@"image\list_bumagi.png");
 
             picBox.Left = 0;
             picBox.Top = 0;
 
             picBox.Margin = new Padding(0);
             flpanel.Controls.Add(picBox);               // добавление на панель
-        }
-        private void sozd_PictureBox_lista()                    
-        {
-            picBox.SizeMode = PictureBoxSizeMode.Zoom;  // картинка во весь pictureBox
-            picBox.Size = new Size(22, 22);
-            picBox.Image = Image.FromFile(@"image\list_bumagi.png");
-
-            picBox.Left = 0;
-            picBox.Top = 0;
-
-            picBox.Margin = new Padding(0);
-            flpanel.Controls.Add(picBox);               // добавление на панель
-        }
-        private void sozd_TextBox()                             
+        }        
+        private void sozd_TextBox()
         {
             textBox.ForeColor = color_text_obichniy; // цвет текста
             textBox.BackColor = color_fona_object; // цвет фона 
+            textBox.Font = new Font("Segoe UI", 11);
             textBox.Width = flpanel.Width - 11 - picBox.Width; // ширина текстбокса           минимум 11   
             //textBox.TextAlign = HorizontalAlignment.Center; // выровнять по центру
             textBox.ShortcutsEnabled = false; // убрать контекстное меню
@@ -378,168 +328,178 @@ namespace _4_этап
             textBox.Cursor = System.Windows.Forms.Cursors.Arrow; // вид курсора всегда одинаковый
             flpanel.Controls.Add(textBox); // лобавляем в левую колонку
         }
-        private void najal_ne_otpustil_MouseDown(object sender, EventArgs e)            // нажал на объект (не отпустил мышь)  перетаскивание       
+        private void najal_ne_otpustil_MouseDown(object sender, MouseEventArgs e)            // нажал на объект (не отпустил мышь)  перетаскивание       
         {
-           
-            
-            if (((TextBox)sender).ReadOnly) // если не идет переименование
+            if (e.Button == MouseButtons.Left)
             {
-                ((TextBox)sender).Parent.Focus(); // убираем каретку
-                
-                foreach (PanelNavigatii pap in list_object) // перетаскивание
+                najata_left_button = true;
+                if (((TextBox)sender).ReadOnly) // если не идет переименование
                 {
-                    if (pap.textBox == ((TextBox)sender))
+                    ((TextBox)sender).Parent.Focus(); // убираем каретку
+
+                    foreach (PanelNavigatii pap in list_object) // перетаскивание
                     {
-                        vozmojno_peretaskivanie = true; // не факт, что идет перетаскивание, возможно просто 
-                        timer.Enabled = true;
-
-                        navel_na_object = pap; // запоминаем выбранную папку 
-                        
-                        mouse_x = Cursor.Position.X; // запоминаем координаты 
-                        mouse_y = Cursor.Position.Y;
-                        textBox_y = navel_na_object.flpanel.Location.Y;
-                        
-                        navel_na_object.flpanel.BringToFront();  // будет поверх остальных textBox
-                        
-                        break;
-                    }
-                }                
-            }     
-        }        
-        private void perehod_v_object_MouseUp(object sender, EventArgs e)               // клинкул по объекту (отпустил мышь)                       
-        {                          
-            timer.Enabled = false; // отключаем на всякий случай таймер
-            timer_value = 1;
-            vozmojno_peretaskivanie = false;
-
-            if (idet_peretaskivanie) // если идет перетаскивание
-            {
-                navel_na_object.textBox.ForeColor = color_text_obichniy;
-                idet_peretaskivanie = false;
-                if (navel_na_object == aktivnaya_papka)
-                {
-                    aktivnaya_papka.flpanel.BackColor = color_fona_aktivniy_obj;
-                    aktivnaya_papka.textBox.BackColor = color_fona_aktivniy_obj;
-                }
-                else
-                {
-                    navel_na_object.flpanel.BackColor = color_fona_object;
-                    navel_na_object.textBox.BackColor = color_fona_object;
-                }
-
-                navel_na_object.flpanel.Location = new Point(navel_na_object.flpanel.Location.X, (navel_na_object.mesto_v_spiske - 1) * navel_na_object.flpanel.Size.Height);
-            }
-            else // кликнули по объекту 
-            {
-                foreach (PanelNavigatii obj in list_object) // делаем папку активной
-                {
-                    if (obj.textBox == ((TextBox)sender))
-                    {
-                        if (obj.this_papka)
+                        if (pap.textBox == ((TextBox)sender))
                         {
-                            if (obj != aktivnaya_papka) // папка не активная 
-                            {
-                                est_aktivnaya_papka = true;
-                                aktivnaya_papka.flpanel.BackColor = color_fona_object;
-                                aktivnaya_papka.textBox.BackColor = color_fona_object;
-                                textBox.ForeColor = color_text_obichniy; // цвет текста
-                                aktivnaya_papka = obj;
-                                aktivnaya_papka.flpanel.BackColor = color_fona_aktivniy_obj;
-                                aktivnaya_papka.textBox.BackColor = color_fona_aktivniy_obj;
+                            vozmojno_peretaskivanie = true; // не факт, что идет перетаскивание, возможно просто 
+                            timer.Enabled = true;
 
-                                if (obj.kolonka == 2)
+                            navel_na_object = pap; // запоминаем выбранную папку 
+
+                            mouse_x = Cursor.Position.X; // запоминаем координаты 
+                            mouse_y = Cursor.Position.Y;
+                            textBox_y = navel_na_object.flpanel.Location.Y;
+
+                            navel_na_object.flpanel.BringToFront();  // будет поверх остальных textBox
+
+                            break;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                najata_left_button = false;
+            }
+        }      
+        private void perehod_v_object_MouseUp(object sender, EventArgs e)               // клинкул по объекту (отпустил мышь)                       
+        {
+            if (najata_left_button)
+            {
+                najata_left_button = false;
+                timer.Enabled = false; // отключаем на всякий случай таймер
+                timer_value = 1;
+                vozmojno_peretaskivanie = false;
+
+                if (idet_peretaskivanie) // если идет перетаскивание
+                {
+                    navel_na_object.textBox.ForeColor = color_text_obichniy;
+                    idet_peretaskivanie = false;
+                    if (navel_na_object == aktivnaya_papka)
+                    {
+                        aktivnaya_papka.flpanel.BackColor = color_fona_aktivniy_obj;
+                        aktivnaya_papka.textBox.BackColor = color_fona_aktivniy_obj;
+                    }
+                    else
+                    {
+                        navel_na_object.flpanel.BackColor = color_fona_object;
+                        navel_na_object.textBox.BackColor = color_fona_object;
+                    }
+
+                    navel_na_object.flpanel.Location = new Point(navel_na_object.flpanel.Location.X, (navel_na_object.mesto_v_spiske - 1) * navel_na_object.flpanel.Size.Height);
+                }
+                else // кликнули по объекту 
+                {
+                    foreach (PanelNavigatii obj in list_object) // делаем папку активной
+                    {
+                        if (obj.textBox == ((TextBox)sender))
+                        {
+                            if (obj.this_papka)
+                            {
+                                if (obj != aktivnaya_papka) // папка не активная 
                                 {
-                                    panel_left.Controls.Clear(); // очищаем левую колонку                
-                                    list_object_left.Clear();// очищаем лист с левой колонки
-                                    foreach (PanelNavigatii papka in list_papki_right)
+                                    est_aktivnaya_papka = true;
+                                    aktivnaya_papka.flpanel.BackColor = color_fona_object;
+                                    aktivnaya_papka.textBox.BackColor = color_fona_object;
+                                    textBox.ForeColor = color_text_obichniy; // цвет текста
+                                    aktivnaya_papka = obj;
+                                    aktivnaya_papka.flpanel.BackColor = color_fona_aktivniy_obj;
+                                    aktivnaya_papka.textBox.BackColor = color_fona_aktivniy_obj;
+
+                                    if (obj.kolonka == 2)
                                     {
-                                        papka.kolonka = 1;
-                                        panel_left.Controls.Add(papka.flpanel);
-                                        list_object_left.Add(papka);
+                                        panel_left.Controls.Clear(); // очищаем левую колонку                
+                                        list_object_left.Clear();// очищаем лист с левой колонки
+                                        foreach (PanelNavigatii papka in list_object_right)
+                                        {
+                                            papka.kolonka = 1;
+                                            panel_left.Controls.Add(papka.flpanel);
+                                            list_object_left.Add(papka);
+                                        }
+                                    }
+                                    panel_right.Controls.Clear(); // очищаем правую колонку
+                                    list_object_right.Clear(); // очищаем лист с правой колонки
+
+                                    foreach (PanelNavigatii papka in aktivnaya_papka.papki_potomki) // добавляем дочерние папки
+                                    {
+                                        papka.kolonka = 2;
+                                        panel_right.Controls.Add(papka.flpanel); // добавляем в правую колонку 
+                                        list_object_right.Add(papka);    // добавляем в лист, ответчстввенный за правую колонку
+                                    }
+                                    papka_praroditel_objey_programmi_id = aktivnaya_papka.papka_roditel;
+
+
+                                    if (papka_praroditel_objey_programmi_id != 0) // если не 0, то сделать активной
+                                    {
+                                        pictureBoxBack.Image = Image.FromFile(@"image\nazad_open.png");
+                                        mojno_vernutsa_nazad = true;
+                                    }
+                                    else
+                                    {
+                                        pictureBoxBack.Image = Image.FromFile(@"image\nazad_close.png");
+                                        mojno_vernutsa_nazad = false;
                                     }
                                 }
-                                panel_right.Controls.Clear(); // очищаем правую колонку
-                                list_papki_right.Clear(); // очищаем лист с правой колонки
-
-                                foreach (PanelNavigatii papka in aktivnaya_papka.papki_potomki) // добавляем дочерние папки
+                                else // нужно переименовать 
                                 {
-                                    papka.kolonka = 2;
-                                    panel_right.Controls.Add(papka.flpanel); // добавляем в правую колонку 
-                                    list_papki_right.Add(papka);    // добавляем в лист, ответчстввенный за правую колонку
-                                }
-                                papka_praroditel_objey_programmi_id = aktivnaya_papka.papka_roditel;
-
-                                                                 
-                                if (papka_praroditel_objey_programmi_id != 0) // если не 0, то сделать активной
-                                {
-                                    pictureBoxBack.Image = Image.FromFile(@"image\nazad_open.png");
-                                    mojno_vernutsa_nazad = true;
-                                }
-                                else
-                                {
-                                    pictureBoxBack.Image = Image.FromFile(@"image\nazad_close.png");
-                                    mojno_vernutsa_nazad = false ;
+                                    if (textBox.ReadOnly)
+                                    {
+                                        timer.Enabled = true;
+                                        mouse_x = Cursor.Position.X;
+                                        mouse_y = Cursor.Position.Y;
+                                    }
                                 }
                             }
-                            else // нужно переименовать 
+                            else // это лист 
                             {
-                                if (textBox.ReadOnly)
+                                if (obj != aktivniy_list) // лист не активный 
                                 {
-                                    timer.Enabled = true;
-                                    mouse_x = Cursor.Position.X;
-                                    mouse_y = Cursor.Position.Y;
+                                    if (est_asktivniy_list)
+                                    {
+                                        // нужно сохранить старый лист 
+                                        aktivniy_list.flpanel.BackColor = color_fona_object;
+                                        aktivniy_list.textBox.BackColor = color_fona_object;
+                                        aktivniy_list.textBox.ForeColor = color_text_obichniy; // цвет текста
+
+                                        LocalDB db1 = new();
+                                        list_vivoda.SaveFile("save.rtf");
+                                        string text_save = File.ReadAllText("save.rtf");
+                                        db1.save_list(db1, aktivniy_list.id, text_save);
+                                        File.Delete("save.rtf");
+                                    }
+                                    est_asktivniy_list = true;
+                                    aktivniy_list = obj;
+                                    aktivniy_list.flpanel.BackColor = color_fona_aktivniy_obj;
+                                    aktivniy_list.textBox.BackColor = color_fona_aktivniy_obj;
+
+
+                                    LocalDB db = new();
+                                    string text_open = db.vivod_text_lista(db, aktivniy_list.id);
+                                    if (text_open != String.Empty)
+                                    {
+                                        File.WriteAllText("open_file.rtf", text_open);
+                                        list_vivoda.LoadFile("open_file.rtf");
+                                    }
+                                    else
+                                    {
+                                        list_vivoda.Text = "";
+                                    }
+
+                                    File.Delete("open_file.rtf");
+
+                                }
+                                else // нужно переименовать 
+                                {
+                                    if (textBox.ReadOnly)
+                                    {
+                                        timer.Enabled = true;
+                                        mouse_x = Cursor.Position.X;
+                                        mouse_y = Cursor.Position.Y;
+                                    }
                                 }
                             }
+                            break;
                         }
-                        else // это лист 
-                        {
-                            if (obj != aktivniy_list) // лист не активный 
-                            {
-                                if (est_asktivniy_list)
-                                {
-                                    // нужно сохранить старый лист 
-                                    aktivniy_list.flpanel.BackColor = color_fona_object;
-                                    aktivniy_list.textBox.BackColor = color_fona_object;
-                                    aktivniy_list.textBox.ForeColor = color_text_obichniy; // цвет текста
-
-                                    LocalDB db1 = new();
-                                    list_vivoda.SaveFile("save.rtf");
-                                    string text_save = File.ReadAllText("save.rtf");
-                                    db1.save_list(db1, aktivniy_list.id, text_save);
-                                    File.Delete("save.rtf");
-                                }
-                                est_asktivniy_list = true;
-                                aktivniy_list = obj;
-                                aktivniy_list.flpanel.BackColor = color_fona_aktivniy_obj;
-                                aktivniy_list.textBox.BackColor = color_fona_aktivniy_obj;
-
-
-                                LocalDB db = new();
-                                string text_open = db.vivod_text_lista(db, aktivniy_list.id);
-                                if (text_open != String.Empty)
-                                {
-                                    File.WriteAllText("open_file.rtf", text_open);
-                                    list_vivoda.LoadFile("open_file.rtf");
-                                }
-                                else
-                                {
-                                    list_vivoda.Text = "";
-                                }
-                                
-                                File.Delete("open_file.rtf");
-
-                            }
-                            else // нужно переименовать 
-                            {
-                                if (textBox.ReadOnly)
-                                {
-                                    timer.Enabled = true;
-                                    mouse_x = Cursor.Position.X;
-                                    mouse_y = Cursor.Position.Y;
-                                }
-                            }
-                        }
-                        break;
                     }
                 }
             }
@@ -559,7 +519,7 @@ namespace _4_этап
             {
                 foreach (PanelNavigatii obj in list_object)
                 {
-                    if (((TextBox)sender) == aktivnaya_papka.textBox || ((TextBox)sender) == aktivniy_list.textBox)
+                    if ((TextBox)sender == aktivnaya_papka.textBox || ((TextBox)sender) == aktivniy_list.textBox)
                     {
                         break; // чтобы лишних действий не делать
                     }
@@ -573,9 +533,9 @@ namespace _4_этап
                 }
             }
         }
-        private void peretaskivanie_v_kolonke(bool eto_papka)           
+        private void peretaskivanie_v_kolonke(bool eto_papka)                                                                                       
         {
-            List<PanelNavigatii> list = navel_na_object.kolonka == 1 ? list_object_left : list_papki_right;
+            List<PanelNavigatii> list = navel_na_object.kolonka == 1 ? list_object_left : list_object_right;
 
             foreach(PanelNavigatii obj in list)
             {
@@ -597,7 +557,7 @@ namespace _4_этап
                 }
             }
         }
-        private void Peretaskivanie_mejdy_kolonkami(bool eto_papka)
+        private void Peretaskivanie_mejdy_kolonkami(bool eto_papka)                                                                                 
         {
             List<PanelNavigatii> list;
             List<PanelNavigatii> new_list;
@@ -607,13 +567,13 @@ namespace _4_этап
             {                
                 nujen_perenos = Cursor.Position.X - form.Location.X > panel_left.Width + 9;
                 list = list_object_left;
-                new_list = list_papki_right;
+                new_list = list_object_right;
                 pn = panel_right;
             }
             else
             {
                 nujen_perenos = Cursor.Position.X - form.Location.X < panel_left.Width + 9;
-                list = list_papki_right;
+                list = list_object_right;
                 new_list = list_object_left;
                 pn = panel_left;
             }
@@ -698,18 +658,23 @@ namespace _4_этап
             {
                 if (mouse_x == Cursor.Position.X && mouse_y == Cursor.Position.Y && timer_value == 20)
                 {
-                    pereimenovanie = textBox.Text;
-                    timer.Enabled = false;
-                    timer_value = 1;
-                    textBox.ReadOnly = false; // разрешается ввод
-                    textBox.Focus();
-                    textBox.SelectionStart = 0;
-                    textBox.SelectionLength = textBox.Text.Length; // выделяется весь текст
-                    textBox.BackColor = color_fona_rename;  // цвет фона
-                    textBox.ForeColor = color_text_rename;          // цвет текста
-                    bilo_rename = true; // для бд
+                    rename_func();
                 }
             }
+        }
+        private void rename_func()                                                                                                                  
+        {
+            pereimenovanie = textBox.Text;
+            timer.Enabled = false;
+            timer_value = 1;
+            textBox.ReadOnly = false; // разрешается ввод
+            textBox.Focus();
+            textBox.SelectionStart = 0;
+            textBox.SelectionLength = textBox.Text.Length; // выделяется весь текст
+            textBox.BackColor = color_fona_rename;  // цвет фона
+            textBox.ForeColor = color_text_rename;          // цвет текста
+            bilo_rename = true; // для бд
+
         }
         private void pokinul_obj_Leave(object sender, EventArgs e)                      // переименовал и покинул текстбокс                         
         {
@@ -755,8 +720,91 @@ namespace _4_этап
                 textBox.ReadOnly = true; // запрет на ввод
                 textBox.Parent.Focus();
             }
-        }
-        
+        }        
+        private void contextMenuSozdanie(ContextMenuStrip cms)
+        {
+            ToolStripMenuItem deleteMenuItem = new("Удалить");
+            ToolStripMenuItem renameMenuItem = new("Переименовать");
 
+            cms.Items.AddRange(new[]
+            {
+                deleteMenuItem,
+                renameMenuItem
+            });
+            renameMenuItem.Click += rename_Menu;
+            deleteMenuItem.Click += Delete_Menu;
+        }
+        private void rename_Menu(object sender, EventArgs e)
+        {
+            rename_func();
+        }
+        private void Delete_Menu(object sender, EventArgs e)
+        {
+            foreach (PanelNavigatii obj in list_object)
+            {
+                if (obj.textBox == contextMS.SourceControl)
+                {
+                    List<PanelNavigatii> list = obj.kolonka == 1 ? list_object_left : list_object_right;
+
+                    foreach (PanelNavigatii obj2 in list) // поправление всех элементов в прошлой колонке которые ниже
+                    {
+                        if (obj2.mesto_v_spiske > obj.mesto_v_spiske)
+                        {
+                            obj2.flpanel.Location = new Point(obj2.flpanel.Location.X, obj2.flpanel.Location.Y - obj2.flpanel.Size.Height);
+                            obj2.mesto_v_spiske--;
+                            LocalDB db = new();
+                            db.perestavlenie_v_kolonke(db, obj2.this_papka, obj2.id, obj2.mesto_v_spiske);
+                        }
+                    }
+
+                    foreach (PanelNavigatii papka in list) // удаление из родителя ссылку на объект
+                    {
+                        if (papka.id == obj.papka_roditel && papka.this_papka)
+                        {
+                            papka.papki_potomki.Remove(obj);
+                            break;
+                        }
+                    }
+                    Delete_rekursiya(obj);                    
+                    break;
+                }
+            }
+        }
+        private void Delete_rekursiya(PanelNavigatii obj)
+        {
+            if (obj.this_papka)
+            {
+                if (obj.papki_potomki.Count > 0) // есть подпапки
+                {
+                    foreach (PanelNavigatii obj_doch in obj.papki_potomki)
+                    {
+                        Delete_rekursiya(obj_doch);
+                    }
+                }
+            }
+            LocalDB db = new();
+            db.delete_obj(db, obj.this_papka, obj.id);
+
+            if (list_object_left.Contains(obj))
+            {
+                list_object_left.Remove(obj);
+                panel_left.Controls.Remove(obj.flpanel);
+                if (list_object_left.Count == 0)
+                {
+                    vernutsa_nazad();
+                }
+            }
+
+            if (list_object_right.Contains(obj))
+            {
+                list_object_right.Remove(obj);
+                panel_right.Controls.Remove(obj.flpanel);
+            }
+
+            list_object.Remove(obj);
+
+            obj = null;
+
+        }
     }
 }

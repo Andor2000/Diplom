@@ -18,7 +18,9 @@ namespace _4_этап
         private Color color_fona_aktivnoy_papke = ColorTranslator.FromHtml("#6B90B8");
         //private Color color_fona = Color.FromArgb(51, 51, 76);
         bool zajata_mishka_na_ikonke = false;
-        public static RichTextBox rich;
+        Timer timer_vhod;
+        int timer_value = 1;
+        MouseButtons mb;
 
         PanelNavigatii papka = new();
 
@@ -30,8 +32,10 @@ namespace _4_этап
 
             LocalDB open_db = new();
             open_db.openBook();
-            richTextBox1.Focus();
-            rich = richTextBox1;
+            timer_vhod = new();
+            timer_vhod.Interval = 100;
+            timer_vhod.Tick += timer_hvod_focus;
+            timer_vhod.Enabled = true;         
         }
         private void addPapka_Click(object sender, EventArgs e)  // добавление в левую колонку папок
         {
@@ -75,10 +79,16 @@ namespace _4_этап
         private void BackClick_Click(object sender, EventArgs e)
         {
             papka.vernutsa_nazad();            
-        }
-        private void удалитьToolStripMenuItem_Click(object sender, EventArgs e)
+        }       
+        private void timer_hvod_focus(object sender, EventArgs e)
         {
-
+            timer_value++;
+            if (timer_value >= 1)
+            {
+                richTextBox1.Focus();
+                timer_vhod.Enabled = false;
+            }
         }
+
     }
 }

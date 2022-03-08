@@ -55,12 +55,12 @@ namespace _4_этап
                 {
                     list_id_potomki.Add(Convert.ToInt32(sqlReader["id_potomok"])); // записываю id папок
                 }
-                sqlReader.Close();
                 for (int i = 0; i < list_id_potomki.Count; i++)
                 {
                     command = new("SELECT * FROM PAPKA WHERE ID_PAPKI=@id", db.getConnection());
                     command.Parameters.AddWithValue("id", list_id_potomki[i]); // типа чтобы взломать было тяжелей                
-                    sqlReader = command.ExecuteReader(); // выполняем запрос
+                    
+                sqlReader.Close();sqlReader = command.ExecuteReader(); // выполняем запрос
 
                     while (sqlReader.Read())
                     {
@@ -223,6 +223,22 @@ namespace _4_этап
             }
             command.Parameters.AddWithValue("id", id); // типа чтобы взломать было тяжелей
             command.Parameters.AddWithValue("name", name); // типа чтобы взломать было тяжелей
+            db.openConnection();
+            await command.ExecuteNonQueryAsync();
+            db.closeConnection();
+        }
+        public async void delete_obj(LocalDB db, bool this_papka, int id)
+        {
+            SqlCommand command;
+            if (this_papka)
+            {
+                command = new("DELETE FROM PAPKA WHERE ID_PAPKI = @id", db.getConnection());
+            }
+            else
+            {
+                command = new("DELETE FROM LIST WHERE ID_LISTA = @id", db.getConnection());
+            }
+            command.Parameters.AddWithValue("id", id); // типа чтобы взломать было тяжелей
             db.openConnection();
             await command.ExecuteNonQueryAsync();
             db.closeConnection();

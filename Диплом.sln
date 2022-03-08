@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Батон", "Батон\Б
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "3_вариант", "3_вариант\3_вариант.csproj", "{02DCBBFB-3D75-43BF-9599-CA7D2629C69C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "4_этап", "4_этап\4_этап.csproj", "{89DFDE5D-5A28-4597-93A1-DE904588150A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkBook", "4_этап\WorkBook.csproj", "{89DFDE5D-5A28-4597-93A1-DE904588150A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
