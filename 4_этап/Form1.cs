@@ -21,6 +21,7 @@ namespace _4_этап
         Timer timer_vhod;
         int timer_value = 1;
         MouseButtons mb;
+        bool panel_svernuta = false;
 
         PanelNavigatii papka = new();
 
@@ -90,5 +91,26 @@ namespace _4_этап
             }
         }
 
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+            if (panel_svernuta)
+            {
+                panel1.Size = new Size(300, this.Size.Height);
+                nazadButton.Image = Image.FromFile(@"image\svernut.png");
+                this.MinimumSize = new Size(1350, 0);
+                //if (this.Size.Width < 1350)
+                //{
+                //    this.Size = new(1350, this.Size.Width);
+                //}
+
+            }
+            else
+            {
+                panel1.Size = new Size(0, this.Size.Height);
+                nazadButton.Image = Image.FromFile(@"image\razvernut.png");
+                this.MinimumSize = new Size(1050, 0);
+            }
+            panel_svernuta = !panel_svernuta;
+        }
     }
 }

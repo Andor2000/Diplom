@@ -44,11 +44,12 @@ namespace _4_этап
             this.label1 = new System.Windows.Forms.Label();
             this.panel5 = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.panel7 = new System.Windows.Forms.Panel();
             this.panel8 = new System.Windows.Forms.Panel();
+            this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
+            this.nazadButtonPanel = new System.Windows.Forms.Panel();
+            this.nazadButton = new System.Windows.Forms.PictureBox();
             this.panel1.SuspendLayout();
             this.panel6.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
@@ -62,6 +63,9 @@ namespace _4_этап
             this.panel5.SuspendLayout();
             this.panel7.SuspendLayout();
             this.panel8.SuspendLayout();
+            this.flowLayoutPanel2.SuspendLayout();
+            this.nazadButtonPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nazadButton)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
@@ -71,7 +75,7 @@ namespace _4_этап
             this.panel1.Controls.Add(this.flowLayoutPanel1);
             this.panel1.Controls.Add(this.panel2);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Location = new System.Drawing.Point(40, 0);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(300, 742);
             this.panel1.TabIndex = 0;
@@ -209,11 +213,11 @@ namespace _4_этап
             this.label1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Exotc350 Bd BT", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label1.Location = new System.Drawing.Point(356, 21);
+            this.label1.Location = new System.Drawing.Point(334, 21);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(288, 33);
+            this.label1.Size = new System.Drawing.Size(364, 33);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Рабочая тетрадочка";
+            this.label1.Text = "Текстовый редактор 2000";
             // 
             // panel5
             // 
@@ -221,9 +225,9 @@ namespace _4_этап
             this.panel5.Controls.Add(this.label1);
             this.panel5.Controls.Add(this.label2);
             this.panel5.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel5.Location = new System.Drawing.Point(300, 0);
+            this.panel5.Location = new System.Drawing.Point(340, 0);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(1000, 80);
+            this.panel5.Size = new System.Drawing.Size(992, 80);
             this.panel5.TabIndex = 1;
             // 
             // label2
@@ -234,25 +238,6 @@ namespace _4_этап
             this.label2.Size = new System.Drawing.Size(162, 40);
             this.label2.TabIndex = 3;
             this.label2.Text = "просто чтобы можно \r\nбыло что-то вывести";
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(1050, 82);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(94, 29);
-            this.button1.TabIndex = 5;
-            this.button1.Text = "Вывод";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(1169, 82);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(94, 29);
-            this.button2.TabIndex = 6;
-            this.button2.Text = "Интернет";
-            this.button2.UseVisualStyleBackColor = true;
             // 
             // richTextBox1
             // 
@@ -271,9 +256,9 @@ namespace _4_этап
             this.panel7.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.panel7.Controls.Add(this.panel8);
             this.panel7.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel7.Location = new System.Drawing.Point(300, 80);
+            this.panel7.Location = new System.Drawing.Point(340, 80);
             this.panel7.Name = "panel7";
-            this.panel7.Size = new System.Drawing.Size(1000, 662);
+            this.panel7.Size = new System.Drawing.Size(992, 662);
             this.panel7.TabIndex = 8;
             // 
             // panel8
@@ -281,23 +266,61 @@ namespace _4_этап
             this.panel8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
             this.panel8.BackColor = System.Drawing.SystemColors.Window;
             this.panel8.Controls.Add(this.richTextBox1);
-            this.panel8.Location = new System.Drawing.Point(28, 24);
+            this.panel8.Location = new System.Drawing.Point(21, 24);
             this.panel8.MaximumSize = new System.Drawing.Size(950, 1000);
             this.panel8.MinimumSize = new System.Drawing.Size(950, 0);
             this.panel8.Name = "panel8";
             this.panel8.Size = new System.Drawing.Size(950, 608);
             this.panel8.TabIndex = 8;
             // 
+            // flowLayoutPanel2
+            // 
+            this.flowLayoutPanel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(51)))), ((int)(((byte)(76)))));
+            this.flowLayoutPanel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.flowLayoutPanel2.Controls.Add(this.nazadButtonPanel);
+            this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Left;
+            this.flowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 0);
+            this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
+            this.flowLayoutPanel2.Name = "flowLayoutPanel2";
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(40, 742);
+            this.flowLayoutPanel2.TabIndex = 9;
+            // 
+            // nazadButtonPanel
+            // 
+            this.nazadButtonPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(51)))), ((int)(((byte)(76)))));
+            this.nazadButtonPanel.Controls.Add(this.nazadButton);
+            this.nazadButtonPanel.Location = new System.Drawing.Point(1, 1);
+            this.nazadButtonPanel.Margin = new System.Windows.Forms.Padding(1);
+            this.nazadButtonPanel.Name = "nazadButtonPanel";
+            this.nazadButtonPanel.Size = new System.Drawing.Size(38, 38);
+            this.nazadButtonPanel.TabIndex = 3;
+            // 
+            // nazadButton
+            // 
+            this.nazadButton.Image = global::_4_этап.Properties.Resources.svernut;
+            this.nazadButton.Location = new System.Drawing.Point(3, 3);
+            this.nazadButton.Name = "nazadButton";
+            this.nazadButton.Size = new System.Drawing.Size(32, 32);
+            this.nazadButton.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.nazadButton.TabIndex = 0;
+            this.nazadButton.TabStop = false;
+            this.nazadButton.Click += new System.EventHandler(this.pictureBox1_Click);
+            this.nazadButton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.navel_na_ikonky_MouseDown);
+            this.nazadButton.MouseLeave += new System.EventHandler(this.navel_na_ikonky_MouseLeave);
+            this.nazadButton.MouseMove += new System.Windows.Forms.MouseEventHandler(this.navel_na_ikonky_MouseMove);
+            this.nazadButton.MouseUp += new System.Windows.Forms.MouseEventHandler(this.navel_na_ikonky_MouseUp);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1300, 742);
+            this.ClientSize = new System.Drawing.Size(1332, 742);
             this.Controls.Add(this.panel7);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.panel5);
             this.Controls.Add(this.panel1);
+            this.Controls.Add(this.flowLayoutPanel2);
+            this.MinimumSize = new System.Drawing.Size(1350, 0);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
@@ -316,6 +339,9 @@ namespace _4_этап
             this.panel5.PerformLayout();
             this.panel7.ResumeLayout(false);
             this.panel8.ResumeLayout(false);
+            this.flowLayoutPanel2.ResumeLayout(false);
+            this.nazadButtonPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.nazadButton)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -335,13 +361,14 @@ namespace _4_этап
         private System.Windows.Forms.Panel addListPanel;
         private System.Windows.Forms.PictureBox addList;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.Panel BackClickPanel;
         private System.Windows.Forms.PictureBox buttonBackClick;
         private System.Windows.Forms.Panel panel7;
         private System.Windows.Forms.Panel panel8;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
+        private System.Windows.Forms.Panel nazadButtonPanel;
+        private System.Windows.Forms.PictureBox nazadButton;
     }
 }
 

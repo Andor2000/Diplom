@@ -14,6 +14,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="bin\Debug\net5.0-windows\image\svernut.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="bin\Debug\net5.0-windows\image\razvernut.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="bin\Debug\net5.0-windows\image\blue_papka.png" />
   </ItemGroup>
 
