@@ -559,20 +559,20 @@ namespace _4_этап
         }
         private void Peretaskivanie_mejdy_kolonkami(bool eto_papka)                                                                                 
         {
+            bool nujen_perenos;
             List<PanelNavigatii> list;
             List<PanelNavigatii> new_list;
             Panel pn;
-            bool nujen_perenos;
             if (kolonka == 1)
             {                
-                nujen_perenos = Cursor.Position.X - form.Location.X > panel_left.Width + 9;
+                nujen_perenos = Cursor.Position.X - form.Location.X > panel_left.Width + 49;
                 list = list_object_left;
                 new_list = list_object_right;
                 pn = panel_right;
             }
             else
             {
-                nujen_perenos = Cursor.Position.X - form.Location.X < panel_left.Width + 9;
+                nujen_perenos = Cursor.Position.X - form.Location.X < panel_left.Width + 49;
                 list = list_object_right;
                 new_list = list_object_left;
                 pn = panel_left;
@@ -678,22 +678,22 @@ namespace _4_этап
         }
         private void pokinul_obj_Leave(object sender, EventArgs e)                      // переименовал и покинул текстбокс                         
         {
-            if (bilo_rename)
+            if (bilo_rename) 
             {
-                if (textBox.Text == String.Empty)
+                if (textBox.Text == String.Empty) // имя стало пустым
                 {
                     textBox.Text = pereimenovanie;
                 }
-                else
+                else // у нас нормальное имя
                 {
                     LocalDB db = new();
-                    db.rename(db, this_papka, aktivnaya_papka.id, textBox.Text);
+                    db.rename(db, this_papka, id, textBox.Text);
                 }
                 bilo_rename = false;
             }
             textBox.BackColor = textBox.Parent.BackColor;
             textBox.ForeColor = color_text_obichniy;
-            aktivnaya_papka.textBox.SelectionStart = 0;
+            textBox.SelectionStart = 0;
             textBox.ReadOnly = true; // запрет на ввод
         }
         private void najali_enter_KeyDown(object sender, KeyEventArgs e)                // при вводе TextBox нажали Enter (pokinul_obj_Leave)       
@@ -710,13 +710,13 @@ namespace _4_этап
                     else
                     {
                             LocalDB db = new();
-                            db.rename(db,this_papka, aktivnaya_papka.id, textBox.Text);                        
+                            db.rename(db,this_papka, id, textBox.Text);                        
                     }
                     bilo_rename = false;
                 }
                 textBox.BackColor = textBox.Parent.BackColor;
                 textBox.ForeColor = color_text_obichniy;
-                aktivnaya_papka.textBox.SelectionStart = 0;
+                textBox.SelectionStart = 0;
                 textBox.ReadOnly = true; // запрет на ввод
                 textBox.Parent.Focus();
             }

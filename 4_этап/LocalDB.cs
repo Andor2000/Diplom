@@ -8,11 +8,19 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+
+
+
 namespace _4_этап
 {
     class LocalDB
     {
-        private  static string strConnect = "";
+        //var settings = MongoClientSettings.FromConnectionString("mongodb+srv://Andor2000:<password>@andor2000.hsmcl.mongodb.net/myFirstDatabase?retryWrites=true&w=majority");
+        //settings.ServerApi = new ServerApi(ServerApiVersion.V1);
+        //var client = new MongoClient(settings);
+        //var database = client.GetDatabase("test");
+
+        private static string strConnect = "";
         SqlConnection connection = new(@"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename = " + strConnect + "Integrated Security = True;");
         public void openBook()
         {
@@ -48,7 +56,7 @@ namespace _4_этап
                 if (sqlReader != null)
                 {
                     sqlReader.Close();
-                }            
+                }
                 List<int> list_id_potomki = new(); // запоминаем нужные id
                 sqlReader = command.ExecuteReader(); // выполняем запрос
                 while (sqlReader.Read())
@@ -59,8 +67,8 @@ namespace _4_этап
                 {
                     command = new("SELECT * FROM PAPKA WHERE ID_PAPKI=@id", db.getConnection());
                     command.Parameters.AddWithValue("id", list_id_potomki[i]); // типа чтобы взломать было тяжелей                
-                    
-                sqlReader.Close();sqlReader = command.ExecuteReader(); // выполняем запрос
+
+                    sqlReader.Close(); sqlReader = command.ExecuteReader(); // выполняем запрос
 
                     while (sqlReader.Read())
                     {
@@ -71,7 +79,7 @@ namespace _4_этап
 
                         PanelNavigatii papka = new();
                         papka.sozdanie_papki_DB(papka, id_db, name_db, mesto_db, id_roditel);
-                        
+
                         openBookPapki(id_db);
                     }
                     sqlReader.Close();
@@ -176,7 +184,7 @@ namespace _4_этап
             }
             else
             {
-                command = new("UPDATE [LIST] SET [PLACE_LISTA] = @mesto WHERE [PLACE_LISTA] = @id", db.getConnection());
+                command = new("UPDATE [LIST] SET [PLACE_LISTA] = @mesto WHERE [ID_LISTA] = @id", db.getConnection());
             }
 
             command.Parameters.AddWithValue("id", navel_id); // типа чтобы взломать было тяжелей
@@ -266,7 +274,7 @@ namespace _4_этап
             SqlCommand command = new("UPDATE LIST SET TEXT = @text WHERE ID_LISTA = @id", db.getConnection());
             command.Parameters.AddWithValue("id", id_lista); // типа чтобы взломать было тяжелей
             command.Parameters.AddWithValue("text", text); // типа чтобы взломать было тяжелей
-            
+
             db.openConnection();
             command.ExecuteNonQuery();
             db.closeConnection();
